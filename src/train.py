@@ -1,13 +1,12 @@
+import sys
+
 import torch
 from torch.optim import lr_scheduler
-
 import torch.nn.functional as F
 import torch.optim as optim
 
 from get_data import get_data
 from model import Model
-
-number_of_epochs = 1
 
 def train(model, device, train_loader, optimizer, epoch, number_of_epochs):
     model.train()
@@ -48,7 +47,17 @@ def check_for_GPU():
     print('Using GPU: {}'.format(use_cuda))
     return torch.device('cuda' if use_cuda else 'cpu')
 
+def get_epochs():
+    args = sys.argv
+    if len(args) != 2:
+        print('Please include number of epochs as an argument')
+        exit()
+    else:
+        return int(args[1])
+
 def main():
+    number_of_epochs = get_epochs()
+
     dataloaders = get_data()
 
     device = check_for_GPU()
